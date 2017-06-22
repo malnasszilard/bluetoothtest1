@@ -36,7 +36,14 @@ public class bluetoothtest extends AppCompatActivity {
         on = (Button) findViewById(R.id.button);
         find = (Button) findViewById(R.id.button2);
         final BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+
         BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+
+
+
 
             public void onReceive(Context context, Intent intent) {
 
@@ -53,10 +60,12 @@ public class bluetoothtest extends AppCompatActivity {
 
                 }
             }
+
         };
+        registerReceiver(mReceiver,filter);
 
 
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+
 
 
 
