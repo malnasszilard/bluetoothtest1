@@ -36,7 +36,25 @@ public class bluetoothtest extends AppCompatActivity {
         on = (Button) findViewById(R.id.button);
         find = (Button) findViewById(R.id.button2);
         final BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        mBluetoothAdapter.startDiscovery();
+        BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+            public void onReceive(Context context, Intent intent) {
+
+
+                String action = intent.getAction();
+                if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    List<String> mDeviceList = new ArrayList<String>();
+                    mDeviceList.add(device.getName() + "\n" + device.getAddress());
+                    ArrayAdapter <String> adapter=(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, mDeviceList));
+                    lv.setAdapter(adapter);
+
+
+
+                }
+            }
+        };
+
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 
@@ -69,32 +87,15 @@ public class bluetoothtest extends AppCompatActivity {
                     System.out.println("connected: " + s);
                                     }*/
 
+                mBluetoothAdapter.startDiscovery();
 
-
-                final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-                    public void onReceive(Context context, Intent intent) {
-                        System.out.println("keresés");
-
-                        String action = intent.getAction();
-                        if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                            List<String> mDeviceList = new ArrayList<String>();
-                            mDeviceList.add(device.getName() + "\n" + device.getAddress());
-                            ArrayAdapter <String> adapter=(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, mDeviceList));
-                            lv.setAdapter(adapter);
-                            System.out.println("enable" + adapter);
-
-
-                        }else{
-                            System.out.println("nincs");}
-                    }
-                };
 
 
             }
 
 
         });
+
        // String countryList[] = {"India", "China", "Australia", "Portugle", "America", "NewZealand"};
 
     }
