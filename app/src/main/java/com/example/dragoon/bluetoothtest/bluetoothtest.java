@@ -6,18 +6,19 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+
 
 public class bluetoothtest extends AppCompatActivity {
 
@@ -36,6 +37,8 @@ public class bluetoothtest extends AppCompatActivity {
         on = (Button) findViewById(R.id.button);
         find = (Button) findViewById(R.id.button2);
         final BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        ThreadConnectBTdevice myThreadConnectBTdevice;
+        ThreadConnected myThreadConnected;
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 
@@ -55,6 +58,7 @@ public class bluetoothtest extends AppCompatActivity {
                     mDeviceList.add(device.getName() + "\n" + device.getAddress());
                     ArrayAdapter <String> adapter=(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, mDeviceList));
                     lv.setAdapter(adapter);
+                    System.out.println(adapter);
 
 
 
@@ -105,7 +109,23 @@ public class bluetoothtest extends AppCompatActivity {
 
         });
 
-       // String countryList[] = {"India", "China", "Australia", "Portugle", "America", "NewZealand"};
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String item = ((TextView)view).getText().toString();
+                myThreadConnectBTdevice = new ThreadConnectBTdevice(device);
+                myThreadConnectBTdevice.start();
+
+                Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+
+
+
+
 
     }
 }
